@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oráculo Digital</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        body {
+            font-family: 'Press Start 2P', cursive;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #000000, #1a1a1a);
+            color: #00ff00;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 30px #00ff00;
+            width: 100%;
+        }
+
+        .left-column {
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        .right-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .digimon-selector {
+            margin-bottom: 20px;
+            margin-top: 80px;
+            float:left;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            background: rgba(0, 255, 0, 0.1);
+            border: 2px solid #00ff00;
+            color: #00ff00;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.8em;
+        }
+
+        .digimon-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 3px solid #00ff00;
+            box-shadow: 0 0 15px #00ff00;
+            margin: 20px auto;
+            display: block;
+        }
+
+        .stats-form {
+            background: rgba(0, 255, 0, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+        }
+
+        .stat-input {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .stat-input label {
+            flex: 2;
+            margin-right: 10px;
+            font-size: 0.7em;
+
+        }
+
+        .stat-input input {
+            flex: 1;
+            background: transparent;
+            border: 2px solid #00ff00;
+            color: #00ff00;
+            padding: 5px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.7em;
+
+        }
+
+        button {
+            background: #00ff00;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            font-family: 'Press Start 2P', cursive;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 20px auto;
+        }
+
+        button:hover {
+            background: #000;
+            color: #00ff00;
+            box-shadow: 0 0 20px #00ff00;
+        }
+
+        #resultado {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(0, 255, 0, 0.1);
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .evolucion-imagen {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 2px solid #00ff00;
+            margin: 10px;
+            display: inline-block;
+        }
+
+        .digital-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: #00ff00;
+            border-radius: 50%;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="digital-particles" id="particles"></div>
+    <div class="container">
+        <h1>Oráculo Digital</h1>
+        <div class="left-column">
+        <div>
+            <div class="digimon-selector">
+                <select id="digimon" onchange="seleccionarDigimon()">
+                    <option value="agumon">Agumon</option>
+                    <option value="yukiagumon">Yuki Agumon</option>
+                    <option value="kokuwamon">Kokuwamon</option>
+                </select>
+            </div>
+            <img id="digimon-image" class="digimon-image" src="agumon.png" alt="Agumon">
+            </div>
+            <div class="stats-form">
+                <div class="stat-input">
+                    <label for="felicidad">Felicidad:</label>
+                    <input type="number" id="felicidad" placeholder="0-100">
+                </div>
+                <div class="stat-input">
+                    <label for="entrenamiento">Entrenamiento:</label>
+                    <input type="number" id="entrenamiento" placeholder="0-100">
+                </div>
+                <div class="stat-input">
+                    <label for="peso">Peso:</label>
+                    <input type="number" id="peso" placeholder="0-100">
+                </div>
+                <div class="stat-input">
+                    <label for="velocidad">Velocidad:</label>
+                    <input type="number" id="velocidad" placeholder="0-100">
+                </div>
+                <div class="stat-input">
+                    <label for="ataque">Ataque:</label>
+                    <input type="number" id="ataque" placeholder="0-100">
+                </div>
+                <div class="stat-input">
+                    <label for="vida">Vida:</label>
+                    <input type="number" id="vida" placeholder="0-100">
+                </div>
+                <div class="stat-input">
+                    <label for="errores">Errores:</label>
+                    <input type="number" id="errores" placeholder="0-100">
+                </div>
+                <div class="stat-input">
+                    <label for="batallas_ganadas">Batallas Ganadas:</label>
+                    <input type="number" id="batallas_ganadas" placeholder="0-100">
+                </div>
+                <div class="stat-input">
+                    <label for="batallas_perdidas">Batallas Perdidas:</label>
+                    <input type="number" id="batallas_perdidas" placeholder="0-100">
+                </div>
+            </div>
+            <button onclick="predecirEvolucion()">Predecir Evolución</button>
+        </div>
+        <div class="right-column">
+            <div id="resultado"></div>
+        </div>
+    </div>
+
+    <script>
+        const evoluciones = {
+            agumon: {
+                greymon: { nombre: "greymon", felicidad: 50, entrenamiento: 40, peso: 30, velocidad: 35, ataque: 45, vida: 50, errores: 10, batallas_ganadas: 20, batallas_perdidas: 5 },
+                vdramon: { nombre: "vdramon", felicidad: 45, entrenamiento: 35, peso: 25, velocidad: 40, ataque: 40, vida: 45, errores: 15, batallas_ganadas: 15, batallas_perdidas: 10 },
+                deltamon: { nombre: "deltamon", felicidad: 40, entrenamiento: 45, peso: 35, velocidad: 30, ataque: 50, vida: 40, errores: 20, batallas_ganadas: 25, batallas_perdidas: 15 },
+                guardromon: { nombre: "guardromon", felicidad: 55, entrenamiento: 30, peso: 40, velocidad: 25, ataque: 35, vida: 55, errores: 5, batallas_ganadas: 10, batallas_perdidas: 20 },
+                tyranomon: { nombre: "tyranomon", felicidad: 35, entrenamiento: 50, peso: 45, velocidad: 20, ataque: 55, vida: 60, errores: 25, batallas_ganadas: 30, batallas_perdidas: 10 },
+                numemon: { nombre: "numemon", felicidad: 20, entrenamiento: 15, peso: 50, velocidad: 15, ataque: 20, vida: 30, errores: 40, batallas_ganadas: 5, batallas_perdidas: 30 },
+                thunderboltmon: { nombre: "thunderboltmon", felicidad: 60, entrenamiento: 55, peso: 35, velocidad: 45, ataque: 60, vida: 50, errores: 5, batallas_ganadas: 35, batallas_perdidas: 5 }
+            },
+            yukiagumon: {
+                vdramon: { nombre: "vdramon", felicidad: 50, entrenamiento: 40, peso: 30, velocidad: 45, ataque: 45, vida: 40, errores: 10, batallas_ganadas: 20, batallas_perdidas: 10 },
+                guardromon: { nombre: "guardromon", felicidad: 55, entrenamiento: 35, peso: 35, velocidad: 30, ataque: 40, vida: 50, errores: 15, batallas_ganadas: 15, batallas_perdidas: 15 },
+                numemon: { nombre: "numemon", felicidad: 25, entrenamiento: 20, peso: 45, velocidad: 20, ataque: 25, vida: 35, errores: 35, batallas_ganadas: 10, batallas_perdidas: 25 },
+                darktyranomon: { nombre: "darktyranomon", felicidad: 30, entrenamiento: 55, peso: 50, velocidad: 25, ataque: 60, vida: 55, errores: 20, batallas_ganadas: 30, batallas_perdidas: 15 },
+                thunderboltmon: { nombre: "thunderboltmon", felicidad: 65, entrenamiento: 60, peso: 40, velocidad: 50, ataque: 65, vida: 45, errores: 5, batallas_ganadas: 35, batallas_perdidas: 5 }
+            },
+            kokuwamon: {
+                greymon: { nombre: "greymon", felicidad: 55, entrenamiento: 45, peso: 35, velocidad: 40, ataque: 50, vida: 45, errores: 15, batallas_ganadas: 25, batallas_perdidas: 10 },
+                vdramon: { nombre: "grevdramonymon", felicidad: 50, entrenamiento: 40, peso: 30, velocidad: 45, ataque: 45, vida: 40, errores: 10, batallas_ganadas: 20, batallas_perdidas: 15 },
+                guardromon: { nombre: "guardromon", felicidad: 60, entrenamiento: 35, peso: 40, velocidad: 35, ataque: 40, vida: 55, errores: 5, batallas_ganadas: 15, batallas_perdidas: 20 },
+                deltamon: { nombre: "deltamon", felicidad: 45, entrenamiento: 50, peso: 45, velocidad: 35, ataque: 55, vida: 50, errores: 20, batallas_ganadas: 30, batallas_perdidas: 15 },
+                numemon: { nombre: "numemon", felicidad: 25, entrenamiento: 20, peso: 45, velocidad: 20, ataque: 25, vida: 35, errores: 35, batallas_ganadas: 10, batallas_perdidas: 25 },
+                darktyranomon: { nombre: "darktyranomon", felicidad: 35, entrenamiento: 55, peso: 55, velocidad: 30, ataque: 60, vida: 60, errores: 25, batallas_ganadas: 35, batallas_perdidas: 10 },
+                thunderboltmon: { nombre: "thunderboltmon", felicidad: 65, entrenamiento: 60, peso: 40, velocidad: 50, ataque: 65, vida: 50, errores: 5, batallas_ganadas: 40, batallas_perdidas: 5 }
+            }
+        };
+
+        const imagenes = {
+            agumon: "agumon.png",
+            yukiagumon: "yukiagumon.png",
+            kokuwamon: "kokuwamon.png",
+            greymon: "greymon.png",
+            vdramon: "https://placebear.com/100/100",
+            deltamon: "https://picsum.photos/100",
+            guardromon: "https://placekitten.com/101/101",
+            tyranomon: "https://placebear.com/101/101",
+            numemon: "numemon",
+            thunderboltmon: "https://placekitten.com/102/102",
+            darktyranomon: "https://placebear.com/102/102"
+        };
+
+        function seleccionarDigimon() {
+            const digimon = document.getElementById('digimon').value;
+            document.getElementById('digimon-image').src = imagenes[digimon];
+        }
+
+        function predecirEvolucion() {
+            const digimon = document.getElementById('digimon').value;
+            const stats = {
+                felicidad: parseInt(document.getElementById('felicidad').value),
+                entrenamiento: parseInt(document.getElementById('entrenamiento').value),
+                peso: parseInt(document.getElementById('peso').value),
+                velocidad: parseInt(document.getElementById('velocidad').value),
+                ataque: parseInt(document.getElementById('ataque').value),
+                vida: parseInt(document.getElementById('vida').value),
+                errores: parseInt(document.getElementById('errores').value),
+                batallas_ganadas: parseInt(document.getElementById('batallas_ganadas').value),
+                batallas_perdidas: parseInt(document.getElementById('batallas_perdidas').value)
+            };
+
+            const posiblesEvoluciones = [];
+
+            for (const [evolucion, requisitos] of Object.entries(evoluciones[digimon])) {
+                if (Object.keys(requisitos).every(stat => stats[stat] >= requisitos[stat])) {
+                    posiblesEvoluciones.push(evolucion);
+                }
+            }
+		console.log("aca");
+	    if((stats.batallas_ganadas + stats.batallas_perdidas < 25) || ((stats.batallas_ganadas * 100)/(stats.batallas_ganadas + 						 	stats.batallas_perdidas) < 60)){
+	        console.log("Valor de digimon:", digimon);
+		console.log("Evoluciones del digimon:", evoluciones[digimon]);
+		console.log("Evolución numemon:", evoluciones[digimon]?.["numemon"]);	
+	    	posiblesEvoluciones.push(evoluciones[digimon]?.["numemon"]);
+	    }
+            const resultado = document.getElementById('resultado');
+            if (posiblesEvoluciones.length > 0) {
+                resultado.innerHTML = `<h2>Posibles evoluciones para ${digimon}:</h2>`;
+                posiblesEvoluciones.forEach(evolucion => {
+                console.log(evolucion);                console.log(JSON.stringify(evolucion));
+                console.log(imagenes[evolucion.nombre]);
+                    resultado.innerHTML += `
+                        <div>
+                            <img src="${evolucion.nombre+'.png'}" alt="${evolucion}" class="evolucion-imagen">
+                            <p>${evolucion.nombre}</p>
+                        </div>
+                    `;
+                });
+            } else {
+                resultado.innerHTML = `<p>No hay evoluciones posibles para ${digimon} con las estadísticas actuales.</p>`;
+            }
+        }
+
+        // Crear partículas digitales
+        function crearParticulas() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.width = Math.random() * 5 + 'px';
+                particle.style.height = particle.style.width;
+                particlesContainer.appendChild(particle);
+
+                animarParticula(particle);
+            }
+        }
+
+        function animarParticula(particle) {
+            const duration = Math.random() * 3 + 2;
+            const keyframes = [
+                { transform: 'translate(0, 0)', opacity: 0.5 },
+                { transform: `translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px)`, opacity: 0 }
+            ];
+            const animation = particle.animate(keyframes, {
+                duration: duration * 1000,
+                iterations: Infinity
+            });
+
+            animation.onfinish = () => {
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                animarParticula(particle);
+            };
+        }
+
+        crearParticulas();
+        seleccionarDigimon(); // Inicializar la imagen del Digimon
+    </script>
+</body>
+</html>
+
+
